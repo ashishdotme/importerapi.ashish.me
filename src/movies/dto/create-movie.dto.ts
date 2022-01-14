@@ -8,13 +8,13 @@ export class CreateMovieDto {
   title: string
 
   @ApiProperty()
-  date?: Date
+  date?: string
 
   @ApiProperty()
-  startDate?: Date
+  startDate?: string
 
   @ApiProperty()
-  endDate?: Date
+  endDate?: string
 
   @ApiProperty()
   loved?: boolean

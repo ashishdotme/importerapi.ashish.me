@@ -10,7 +10,8 @@ export class MoviesService {
 
   }
 
-  randomDate(start, end = new Date()) {
+  randomDate(start, end) {
+    end = _.isUndefined(end) ? new Date() : new Date(end)
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   }
 
@@ -24,9 +25,9 @@ export class MoviesService {
       `http://www.omdbapi.com/?t=${createMovieDto.title}&apikey=${this.configService.get<string>('OMDB')}`,
     );
     if(!_.isEmpty(createMovieDto.date)){
-      viewingDate = createMovieDto.date
-    } else if(!_.isEmpty(createMovieDto.startDate) && !_.isEmpty(createMovieDto.endDate)){
-      viewingDate = this.randomDate(createMovieDto.startDate, createMovieDto.endDate)
+      viewingDate = new Date(createMovieDto.date)
+    } else if(!_.isEmpty(createMovieDto.startDate)){
+      viewingDate = this.randomDate(new Date(createMovieDto.startDate), createMovieDto.endDate)
     }
     if(movieDetails){
       movieDetails = movieDetails.data
