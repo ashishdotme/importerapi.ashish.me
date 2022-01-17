@@ -8,7 +8,7 @@ WORKDIR /home/node
 
 COPY . /home/node
 
-RUN npm ci
+RUN npm install
 ENV NODE_ENV production
 RUN npm run build
 RUN npm prune --production
