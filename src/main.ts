@@ -1,8 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import axios from 'axios'
+import * as https from 'https';
 
 async function bootstrap() {
+  const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+  })
+  axios.defaults.httpsAgent = httpsAgent
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('Cats example')
@@ -12,6 +18,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  app.enableCors();
+  await app.listen(4000);
 }
 bootstrap();
