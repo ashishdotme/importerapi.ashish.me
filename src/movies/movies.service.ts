@@ -48,7 +48,7 @@ export class MoviesService {
           _.get(movieDetails.Ratings[0], 'Value').split('/')[0],
         ),
         imdbId: movieDetails.imdbID,
-        loved: createMovieDto.loved || false,
+        loved: createMovieDto.loved || true,
       };
       const config = {
         headers: {
