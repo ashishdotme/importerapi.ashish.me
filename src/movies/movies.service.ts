@@ -63,9 +63,11 @@ export class MoviesService {
         );
         return movieCreated.data;
       } catch (e) {
+        await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_movie_failed', message: createMovieDto.title})
         return { error: `Failed to create movie - ${e}` };
       }
     } else {
+      await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_movie_failed', message: createMovieDto.title})
       return { error: 'Movie not found' };
     }
   }

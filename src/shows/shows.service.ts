@@ -66,9 +66,11 @@ export class ShowsService {
         );
         return showCreated.data;
       } catch (e) {
+        await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_show_failed', message: createShowDto.title})
         return { error: `Failed to create show - ${e}` };
       }
     } else {
+      await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_show_failed', message: createShowDto.title})
       return { error: 'Show not found' };
     }
   }
