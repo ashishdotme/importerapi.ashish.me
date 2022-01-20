@@ -5,7 +5,7 @@
 <h2 align="center">importer-api</h2>
 
 <p align="center">
-<a href="https://img.shields.io/github/last-commit/ashishdotme/importerapi.ashish.me?style=for-the-badge"><img src="https://img.shields.io/github/last-commit/ashishdotme/importer-api?style=for-the-badge"></a>
+<a href="https://img.shields.io/github/last-commit/ashishdotme/importerapi.ashish.me?style=for-the-badge"><img src="https://img.shields.io/github/last-commit/ashishdotme/importerapi.ashish.me?style=for-the-badge"></a>
 </p>
 
 <p align="center">📦 bulk importer </p>
