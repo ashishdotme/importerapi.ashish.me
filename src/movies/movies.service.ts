@@ -35,27 +35,27 @@ export class MoviesService {
       );
     }
     if (movieDetails) {
-      movieDetails = movieDetails.data;
-      console.log(movieDetails)
-      newMovie = {
-        title: movieDetails.Title,
-        description: movieDetails.Plot,
-        language: 'English',
-        year: Number(movieDetails.Year),
-        genre: movieDetails.Genre,
-        viewingDate: viewingDate,
-        imdbRating: Number(
-          _.get(movieDetails.Ratings[0], 'Value').split('/')[0],
-        ),
-        imdbId: movieDetails.imdbID,
-        loved: createMovieDto.loved || true,
-      };
-      const config = {
-        headers: {
-          authorization: headers.authorization
-        },
-      };
       try {
+        movieDetails = movieDetails.data;
+        console.log(movieDetails);
+        newMovie = {
+          title: movieDetails.Title,
+          description: movieDetails.Plot,
+          language: 'English',
+          year: Number(movieDetails.Year),
+          genre: movieDetails.Genre,
+          viewingDate: viewingDate,
+          imdbRating: Number(
+            _.get(movieDetails.Ratings[0], 'Value').split('/')[0],
+          ),
+          imdbId: movieDetails.imdbID,
+          loved: createMovieDto.loved || true,
+        };
+        const config = {
+          headers: {
+            authorization: headers.authorization,
+          },
+        };
         const movieCreated = await axios.post(
           'https://systemapi.prod.ashish.me/movies',
           newMovie,
@@ -63,11 +63,17 @@ export class MoviesService {
         );
         return movieCreated.data;
       } catch (e) {
-        await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_movie_failed', message: createMovieDto.title})
+        await axios.post('https://systemapi.prod.ashish.me/events', {
+          type: 'create_movie_failed',
+          message: createMovieDto.title,
+        });
         return { error: `Failed to create movie - ${e}` };
       }
     } else {
-      await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_movie_failed', message: createMovieDto.title})
+      await axios.post('https://systemapi.prod.ashish.me/events', {
+        type: 'create_movie_failed',
+        message: createMovieDto.title,
+      });
       return { error: 'Movie not found' };
     }
   }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateShowDto } from './dto/create-show.dto';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios'
-import * as _ from 'lodash'
+import axios from 'axios';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ShowsService {
@@ -35,30 +35,34 @@ export class ShowsService {
       );
     }
     if (showDetails) {
-      showDetails = showDetails.data;
-      newShow = {
-        title: `${showDetails.Title} Season ${createShowDto.seasonNumber}`,
-        seasonNumber: createShowDto.seasonNumber,
-        showName: showDetails.Title,
-        description: showDetails.Plot,
-        language: 'English',
-        year: Number(showDetails.Year.includes('–')? showDetails.Year.split('–')[0] : showDetails.Year),
-        genre: showDetails.Genre,
-        startedDate: viewingDate,
-        status: 'Started',
-        imdbRating: Number(
-          _.get(showDetails.Ratings[0], 'Value').split('/')[0],
-        ),
-        imdbId: showDetails.imdbID,
-        loved: createShowDto.loved || true,
-      };
-      console.log(newShow)
-      const config = {
-        headers: {
-          authorization: headers.authorization
-        },
-      };
       try {
+        showDetails = showDetails.data;
+        newShow = {
+          title: `${showDetails.Title} Season ${createShowDto.seasonNumber}`,
+          seasonNumber: createShowDto.seasonNumber,
+          showName: showDetails.Title,
+          description: showDetails.Plot,
+          language: 'English',
+          year: Number(
+            showDetails.Year.includes('–')
+              ? showDetails.Year.split('–')[0]
+              : showDetails.Year,
+          ),
+          genre: showDetails.Genre,
+          startedDate: viewingDate,
+          status: 'Started',
+          imdbRating: Number(
+            _.get(showDetails.Ratings[0], 'Value').split('/')[0],
+          ),
+          imdbId: showDetails.imdbID,
+          loved: createShowDto.loved || true,
+        };
+        console.log(newShow);
+        const config = {
+          headers: {
+            authorization: headers.authorization,
+          },
+        };
         const showCreated = await axios.post(
           'https://systemapi.prod.ashish.me/shows',
           newShow,
@@ -66,11 +70,17 @@ export class ShowsService {
         );
         return showCreated.data;
       } catch (e) {
-        await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_show_failed', message: createShowDto.title})
+        await axios.post('https://systemapi.prod.ashish.me/events', {
+          type: 'create_show_failed',
+          message: createShowDto.title,
+        });
         return { error: `Failed to create show - ${e}` };
       }
     } else {
-      await axios.post('https://systemapi.prod.ashish.me/events', { type: 'create_show_failed', message: createShowDto.title})
+      await axios.post('https://systemapi.prod.ashish.me/events', {
+        type: 'create_show_failed',
+        message: createShowDto.title,
+      });
       return { error: 'Show not found' };
     }
   }
